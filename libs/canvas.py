@@ -16,7 +16,7 @@ from qtpy import QtWidgets
 from libs.shape import Shape
 from libs.lib import distance
 from libs.polygon import Polygon
-import labelme.utils
+import utils
 import math
 import numpy as np
 CURSOR_DEFAULT = Qt.ArrowCursor
@@ -1071,7 +1071,7 @@ class Canvas(QWidget):
             shape.points[index] = point1
             shape.points[index-2] = point2
         elif index == 0 or index == 2:
-            scale = labelme.utils.distance(pos-self.tempbox[index-2])/labelme.utils.distance(self.tempbox[index]-self.tempbox[index-2])
+            scale = utils.distance(pos-self.tempbox[index-2])/utils.distance(self.tempbox[index]-self.tempbox[index-2])
             if index == 0:
                 check = 1
             else:
@@ -1137,13 +1137,3 @@ class Canvas(QWidget):
         return False
 
 
-#dist1 = labelme.utils.distance(point1-points[1])
-        # dist2 = labelme.utils.distance(points[0]-point1)
-        # if dist1 == 0:
-        #     dist1 = 1
-        # x2 = points[1].x()-(points[1].y()-y1)*(dist2/dist1)
-        # y2 = points[1].y()-(x1-points[1].x())*(dist2/dist1)
-        # point2 = QPointF(x2,y2)
-        # print(x1,y1)
-        # # print(point1)
-        # # print(point2)

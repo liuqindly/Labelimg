@@ -4,7 +4,7 @@ import math
 from qtpy import QtCore
 from qtpy import QtGui
 import sys
-import labelme.utils
+import utils
 
 
 # TODO(unknown):
@@ -207,7 +207,7 @@ class Polygon(object):
         min_distance = float('inf')
         min_i = None
         for i, p in enumerate(self.points):
-            dist = labelme.utils.distance(p - point)
+            dist = utils.distance(p - point)
             if dist <= epsilon and dist < min_distance:
                 min_distance = dist
                 min_i = i
@@ -219,12 +219,12 @@ class Polygon(object):
         min1_i = None
         min2_i = None
         for i, p in enumerate(self.points):
-            dist = labelme.utils.distance(p - point)
+            dist = utils.distance(p - point)
             if dist < min_distance1:
                 min_distance1 = dist
                 min1_i = i
         for i, p in enumerate(self.points):
-            dist = labelme.utils.distance(p - point)
+            dist = utils.distance(p - point)
             if dist < min_distance2 and dist > min_distance1:
                 min_distance2 = dist
                 min2_i = i
@@ -239,7 +239,7 @@ class Polygon(object):
         post_i = None
         for i in range(len(self.points)):
             line = [self.points[i - 1], self.points[i]]
-            dist = labelme.utils.distancetoline(point, line)
+            dist = utils.distancetoline(point, line)
             if dist <= epsilon and dist < min_distance:
                 min_distance = dist
                 post_i = i
@@ -249,7 +249,7 @@ class Polygon(object):
         post_i = None
         for i in range(len(self.points)):
             line = [self.points[i - 1], self.points[i]]
-            dist = labelme.utils.distancetoline(point, line)
+            dist = utils.distancetoline(point, line)
             if dist < min_distance:
                 min_distance = dist
                 post_i = i

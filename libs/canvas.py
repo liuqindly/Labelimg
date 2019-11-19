@@ -490,6 +490,9 @@ class Canvas(QWidget):
             self.repaint()
         else:
             self.selectedpolygon.points = [p for p in shape.points]
+            if self.selectedpolygon.innerpolygons != []:
+                for i in range(0,len(self.selectedpolygon.innerpolygons)):
+                    self.selectedpolygon.innerpolygons[i].points = [p for p in shape.innerpolygons[i].points]
         self.selectedShapeCopy = None
 
     def hideBackroundShapes(self, value):

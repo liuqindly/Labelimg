@@ -1315,7 +1315,6 @@ class MainWindow(QMainWindow, WindowMixin):
                     xmlPath = os.path.splitext(filePath)[0] + XML_EXT
                     if os.path.isfile(xmlPath):
                         self.loadPascalXMLByFilename(xmlPath)
-
             self.setWindowTitle(__appname__ + ' ' + filePath)
 
             # Default : select last item if there is at least one item
@@ -1539,6 +1538,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 filename = self.mImgList[currIndex + 1]
 
         if filename:
+            print(filename)
             self.loadFile(filename)
         
 

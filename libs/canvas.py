@@ -801,6 +801,7 @@ class Canvas(QWidget):
     def loadPixmap(self, pixmap):
         self.pixmap = pixmap
         self.shapes = []
+        self.polygons = []
         self.repaint()
 
     def loadShapes(self, shapes):

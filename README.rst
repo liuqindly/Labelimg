@@ -163,8 +163,6 @@ Hotkeys
 +------------+--------------------------------------------+
 | a          | Previous image                             |
 +------------+--------------------------------------------+
-| del        | Delete the selected rect box               |
-+------------+--------------------------------------------+
 | Ctrl++     | Zoom in                                    |
 +------------+--------------------------------------------+
 | Ctrl--     | Zoom out                                   |
@@ -188,3 +186,65 @@ FAQ:
 直线：      line
 线段:       linestrip
 斜矩形：    rectangle with an angle
+
+
+example of the xml file：
+<annotation>
+	<folder>good</folder>
+	<filename>0000_00607_success+00606_success_w0.jpg</filename>
+	<path>D:\work\FingerProject\test\176_finger_pairs_wet2wet_whitefilter\good\0000_00607_success+00606_success_w0.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>176</width>
+		<height>176</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>person</name>
+		<pose>1</pose>
+		<unique>0</unique>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<points>
+			<x>[127, 144]</x>
+			<y>[110, 83]</y>
+		</points>
+		<polygontype>circle</polygontype>
+	</object>
+	<object>
+		<name>dog</name>
+		<pose>1</pose>
+		<unique>0</unique>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<points>
+			<x>[16, 93, 93, 16]</x>
+			<y>[27, 27, 104, 104]</y>
+		</points>
+		<polygontype>rectangle</polygontype>
+		<polygon>
+			<points>
+				<x>[46, 41, 58, 63]</x>
+				<y>[35, 42, 46, 40]</y>
+			</points>
+			<polygontype>polygon</polygontype>
+		</polygon>
+		<polygon>
+			<points>
+				<x>[62, 58, 73, 73]</x>
+				<y>[72, 82, 86, 77]</y>
+			</points>
+			<polygontype>polygon</polygontype>
+		</polygon>
+		<polygon>
+			<points>
+				<x>[37, 71, 81, 46]</x>
+				<y>[62, 53, 91, 99]</y>
+			</points>
+			<polygontype>x-rectangle</polygontype>
+		</polygon>
+	</object>
+</annotation>

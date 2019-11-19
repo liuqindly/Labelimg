@@ -326,11 +326,25 @@ class Polygon(object):
     def highlightClear(self):
         self._highlightIndex = None
 
-    def copy(self):
+    def copy(self,type=0):
         shape = Polygon(label=self.label, shape_type=self.shape_type)
         shape.points = [copy.deepcopy(p) for p in self.points]
         shape.fill = self.fill
         shape.selected = self.selected
+        copybox = []
+        if type == 1:
+            for polygon in self.innerpolygons:
+                newpolygon = Polygon(label=polygon.label, shape_type=polygon.shape_type)
+                
+                newpolygon.points = [copy.deepcopy(p) for p in polygon.points]
+                newpolygon.fill = self.fill
+                newpolygon.line_color = polygon.line_color
+                newpolygon.selected = False
+                copybox.append(newpolygon)
+                
+            shape.innerpolygons = copybox
+        else:
+            pass
         shape._closed = self._closed
         shape.line_color = copy.deepcopy(self.line_color)
         shape.fill_color = copy.deepcopy(self.fill_color)

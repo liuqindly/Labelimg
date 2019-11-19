@@ -26,7 +26,7 @@ class LabelFile(object):
         self.shapes = ()
         self.imagePath = None
         self.imageData = None
-        self.verified = False
+        self.verified = None
 
     def savePascalVocFormat(self, filename, shapes, imagePath, imageData,
                             lineColor=None, fillColor=None, databaseSrc=None):
@@ -66,7 +66,14 @@ class LabelFile(object):
         return
 
     def toggleVerify(self):
-        self.verified = not self.verified
+        if self.verified == None:
+            self.verified = 'yes'
+        # elif self.verified == 'yes':
+        #     self.verified = 'yes1'
+        # elif self.verified == 'yes1':
+        #     self.verified = 'yes2'
+        else:
+            self.verified = None
 
     ''' ttf is disable
     def load(self, filename):

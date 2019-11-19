@@ -87,7 +87,7 @@ class Canvas(QWidget):
         self.hpolygon = None
         self.hpolygonedge = None
         self.tempbox = []
-
+        self.rectangleVertrixcheck = False
 
     def setDrawingColor(self, qColor):
         self.drawingLineColor = qColor
@@ -213,7 +213,7 @@ class Canvas(QWidget):
                 self.boundedMovepolygonShape(self.selectedShapeCopy, pos)
                 self.repaint()
             elif self.selectedpolygon:
-                self.selectedShapeCopy = self.selectedpolygon.copy()
+                self.selectedShapeCopy = self.selectedpolygon.copy(1)
                 self.repaint()
                 return
             return 
@@ -289,28 +289,29 @@ class Canvas(QWidget):
                 index = polygon.nearestVertex(pos, self.epsilon)
                 index_edge = polygon.nearestEdge(pos, self.epsilon)
             if index is not None:
-                if self.selectedpolygonVertex():
-                    if self.hpolygon:
-                        self.hpolygon.highlightClear()
-                if self.polygonEditing():        
-                    if selecting2:
-                        self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, self.selectedpolygon2,index_edge
-                        self.selectedpolygon2.highlightVertex(index, self.selectedpolygon2.MOVE_VERTEX)
+                if not self.rectangleVertrixcheck:
+                    if self.selectedpolygonVertex():
+                        if self.hpolygon:
+                            self.hpolygon.highlightClear()
+                    if self.polygonEditing():        
+                        if selecting2:
+                            self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, self.selectedpolygon2,index_edge
+                            self.selectedpolygon2.highlightVertex(index, self.selectedpolygon2.MOVE_VERTEX)
+                        else:
+                            self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, innerpolygon,index_edge
+                            if innerpolygon:
+                                innerpolygon.highlightVertex(index, innerpolygon.MOVE_VERTEX)
+                    elif selecting:
+                        self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, self.selectedpolygon,index_edge
+                        self.selectedpolygon.highlightVertex(index, polygon.MOVE_VERTEX)
                     else:
-                        self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, innerpolygon,index_edge
-                        if innerpolygon:
-                            innerpolygon.highlightVertex(index, innerpolygon.MOVE_VERTEX)
-                elif selecting:
-                    self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, self.selectedpolygon,index_edge
-                    self.selectedpolygon.highlightVertex(index, polygon.MOVE_VERTEX)
-                else:
-                    self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, polygon,index_edge
-                    polygon.highlightVertex(index, polygon.MOVE_VERTEX)
-                self.overrideCursor(CURSOR_POINT)
-                self.setToolTip("Click & drag to move point")
-                self.setStatusTip(self.toolTip())
-                self.update()
-                break
+                        self.hpolygonVertex, self.hpolygon, self.hpolygonedge = index, polygon,index_edge
+                        polygon.highlightVertex(index, polygon.MOVE_VERTEX)
+                    self.overrideCursor(CURSOR_POINT)
+                    self.setToolTip("Click & drag to move point")
+                    self.setStatusTip(self.toolTip())
+                    self.update()
+                    break
             elif self.polygonEditing() and self.selectedpolygon:
                 if self.selectedpolygon.innerpolygons != []:
                     for polygon in self.selectedpolygon.innerpolygons:
@@ -327,25 +328,27 @@ class Canvas(QWidget):
                             self.overrideCursor(CURSOR_GRAB)
                             self.update()
                             break
-            elif polygon.containsPoint(pos):
+            elif polygon.containsPoint(pos) and self.hpolygon:
                 if self.selectedpolygonVertex():
                     self.hpolygon.highlightClear()
-                self.hpolygonVertex = None
-                self.hpolygon = polygon
-                self.hpolygonedge = index_edge
-                self.setToolTip(
-                    "Click & drag to move shape '%s'" )
-                self.setStatusTip(self.toolTip())
-                self.overrideCursor(CURSOR_GRAB)
-                self.update()
-                break
+                if not self.rectangleVertrixcheck:
+                    self.hpolygonVertex = None
+                    self.hpolygon = polygon
+                    self.hpolygonedge = index_edge
+                    self.setToolTip(
+                        "Click & drag to move shape '%s'" )
+                    self.setStatusTip(self.toolTip())
+                    self.overrideCursor(CURSOR_GRAB)
+                    self.update()
+                    break
             else:  # Nothing found, clear highlights, reset state.
                 if self.hpolygon:
                     self.hpolygon.highlightClear()
                     self.update()
-                if not self.selectedpolygon:
-                    self.hpolygon = None
-                self.hpolygonVertex,  self.hpolygonedge = None, None
+                if not self.rectangleVertrixcheck:
+                    if not self.selectedpolygon:
+                        self.hpolygon = None
+                    self.hpolygonVertex,  self.hpolygonedge = None, None
                 self.setToolTip('('+str(int(pos.x()))+'['+str(int(pos.x())+176)+'],'+str(int(pos.y()))+')')
         if not self.outOfPixmap(pos):
             self.setToolTip('('+str(int(pos.x()))+'['+str(int(pos.x())+176)+'],'+str(int(pos.y()))+')')
@@ -405,7 +408,10 @@ class Canvas(QWidget):
                         self.update()
             
             else:
-                
+                if ev.button() == QtCore.Qt.LeftButton and self.hpolygon and self.hpolygonVertex:
+                    if self.hpolygon.shape_type == 'x-rectangle' and (self.polygonEditing() or self.editing()):
+                        
+                        self.rectangleVertrixcheck = True
                 self.selectpolygonPoint(pos)
                 self.prevPoint = pos
                 self.repaint()
@@ -465,6 +471,10 @@ class Canvas(QWidget):
                 # Cancel the move by deleting the shadow copy.
                 self.selectedShapeCopy = None
                 self.repaint()
+        elif ev.button() == QtCore.Qt.LeftButton and self.hpolygon and self.hpolygonVertex:
+            if self.hpolygon.shape_type == 'x-rectangle' and (self.polygonEditing() or self.editing()):
+                
+                self.rectangleVertrixcheck = False
         elif ev.button() == QtCore.Qt.LeftButton and self.selectedShape:
             self.overrideCursor(CURSOR_GRAB)
 
@@ -542,10 +552,6 @@ class Canvas(QWidget):
 
         if self.selectedShapeCopy:
             self.selectedShapeCopy.paint(p)
-
-        
-
-
 
         if self.polcurrent:
             
@@ -739,9 +745,9 @@ class Canvas(QWidget):
         self.shapeMoved.emit()
         self.repaint()
 
-    def copySelectedShape(self):
+    def copySelectedShape(self,type=0):
         if self.selectedpolygon:
-            shape = self.selectedpolygon.copy()
+            shape = self.selectedpolygon.copy(type=type)
             self.deSelectpolygon()
             self.polygons.append(shape)
             shape.selected = True
@@ -801,6 +807,7 @@ class Canvas(QWidget):
     def loadPixmap(self, pixmap):
         self.pixmap = pixmap
         self.shapes = []
+        self.rectangleVertrixcheck = False
         self.polygons = []
         self.repaint()
 

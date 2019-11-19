@@ -18,7 +18,7 @@ class PascalVocWriter:
         self.imgSize = imgSize
         self.boxlist = []
         self.localImgPath = localImgPath
-        self.verified = False
+        self.verified = None
 
     def prettify(self, elem):
         """
@@ -101,13 +101,13 @@ class PascalVocWriter:
             truncated.text = "0"
             difficult = SubElement(object_item, 'difficult')
             difficult.text = str( bool(each_object['difficult']) & 1 )
+            polygontype = SubElement(object_item, 'polygontype')
+            polygontype.text = str(each_object['polygontype'])
             points = SubElement(object_item,'points')
             x = SubElement(points, 'x')
             x.text = str(each_object['x'])
             y = SubElement(points, 'y')
             y.text = str(each_object['y'])
-            polygontype = SubElement(object_item, 'polygontype')
-            polygontype.text = str(each_object['polygontype'])
             if each_object['inpolygon'] != []:
                 for item in each_object['inpolygon']:
                     inpolygon = SubElement(object_item, 'polygon')
@@ -162,9 +162,13 @@ class PascalVocReader:
         try:
             verified = xmltree.attrib['verified']
             if verified == 'yes':
-                self.verified = True
+                self.verified = 'yes'
+            elif verified == 'yes1':
+                self.verified = 'yes1'
+            elif verified == 'yes2':
+                self.verified = 'yes2'
         except KeyError:
-            self.verified = False
+            self.verified = None
 
         for object_iter in xmltree.findall('object'):
             innerpolygon = []

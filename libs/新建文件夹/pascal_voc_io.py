@@ -18,7 +18,7 @@ class PascalVocWriter:
         self.imgSize = imgSize
         self.boxlist = []
         self.localImgPath = localImgPath
-        self.verified = False
+        self.verified = None
 
     def prettify(self, elem):
         """

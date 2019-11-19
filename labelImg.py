@@ -515,6 +515,7 @@ class MainWindow(QMainWindow, WindowMixin):
         addActions(self.canvas.menus[0], self.actions.beginnerContext)
         addActions(self.canvas.menus[1], (
             action(u'复制到这里', self.copyShape),
+            # action(u'复制到这里,同时复制内部框', self.copyShape(1)),
             action(u'移动到这里', self.moveShape)))
 
         self.tools = self.toolbar('Tools')
@@ -1051,7 +1052,7 @@ class MainWindow(QMainWindow, WindowMixin):
             return False
 
 
-    def copySelectedShape(self):
+    def copySelectedShape(self,type=0):
         self.addLabel(self.canvas.copySelectedShape())
         # fix copy and delete
         self.shapeSelectionChanged(True)

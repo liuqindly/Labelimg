@@ -316,7 +316,6 @@ class Canvas(QWidget):
                 if self.selectedpolygon.innerpolygons != []:
                     for polygon in self.selectedpolygon.innerpolygons:
                         if polygon.containsPoint(pos):
-                            
                             if self.selectedpolygonVertex():
                                 self.hpolygon.highlightClear()
                             self.hpolygonVertex = None
@@ -328,6 +327,14 @@ class Canvas(QWidget):
                             self.overrideCursor(CURSOR_GRAB)
                             self.update()
                             break
+                        else:  # Nothing found, clear highlights, reset state.
+                            if self.hpolygon:
+                                self.hpolygon.highlightClear()
+                                self.update()
+                            if not self.rectangleVertrixcheck:
+                                if not self.selectedpolygon:
+                                    self.hpolygon = None
+                                self.hpolygonVertex,  self.hpolygonedge = None, None
             elif polygon.containsPoint(pos) and self.hpolygon:
                 if self.selectedpolygonVertex():
                     self.hpolygon.highlightClear()
@@ -492,7 +499,7 @@ class Canvas(QWidget):
             self.selectedpolygon.points = [p for p in shape.points]
             if self.selectedpolygon.innerpolygons != []:
                 for i in range(0,len(self.selectedpolygon.innerpolygons)):
-                    self.selectedpolygon.innerpolygons[i].points = [p for p in shape.innerpolygons[i].points]
+                    self.selectedpolygon.innerpolygons[i].points = [p for p in shape.innerpolygons[i].  points]
         self.selectedShapeCopy = None
 
     def hideBackroundShapes(self, value):
@@ -1095,9 +1102,13 @@ class Canvas(QWidget):
             newpoint2 = QPointF(newpoint2x,newpoint2y)
             
             shape.points[index-1] = self.rotatepoint(self.tempbox[index-2],self.tempbox[index],pos,newpoint1,check)
-            shape.points[index-3] = self.rotatepoint(self.tempbox[index-2],self.tempbox[index],pos,newpoint2,check)
-            
+            shape.points[index-3] = self.rotatepoint(self.tempbox[index-2],self.tempbox[index],pos,newpoint2,check)        
             shape.points[index] = pos
+
+            # if index == 0:
+            #     for inpolygon in shape.innerpolygons:
+            #         for point in inpolygon.points:
+            #             inpolygon.points[inpolygon.points.index(point)] = self.rotatepoint(self.tempbox[index-2],self.tempbox[index],pos,point,check)
             
 
             

@@ -1,184 +1,99 @@
-LabelImg
+LabelImg-polygon
 
-Installation
+简述
 ------------------
-
-Download prebuilt binaries
+这是一款自修改的labelIMG，新增除了矩形以外其他图形的绘制，并且支持标注框内添加内部标注框
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
--  `Windows & Linux <https://tzutalin.github.io/labelImg/>`__
-
--  macOS. Binaries for macOS are not yet available. Help would be appreciated. At present, it must be `built from source <#macos>`__.
-
-Build from source
-~~~~~~~~~~~~~~~~~
-
-Linux/Ubuntu/Mac requires at least `Python
-2.6 <https://www.python.org/getit/>`__ and has been tested with `PyQt
-4.8 <https://www.riverbankcomputing.com/software/pyqt/intro>`__.
+图片示例：
 
 
-Ubuntu Linux
-^^^^^^^^^^^^
-Python 2 + Qt4
+![Image text](https://wx4.sinaimg.cn/mw1024/e1fef501gy1g9zqfu1fimj21hc0sd15z.jpg)
 
-.. code::
-
-    sudo apt-get install pyqt4-dev-tools
-    sudo pip install lxml
-    make qt4py2
-    python labelImg.py
-    python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-Python 3 + Qt5
-
-.. code::
-
-    sudo apt-get install pyqt5-dev-tools
-    sudo pip3 install lxml
-    make qt5py3
-    python3 labelImg.py
-    python3 labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-macOS
-^^^^
-Python 2 + Qt4
-
-.. code::
-
-    brew install qt qt4
-    brew install libxml2
-    make qt4py2
-    python labelImg.py
-    python  labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-Python 3 + Qt5 (Works on macOS High Sierra)
-
-.. code::
-
-    brew install qt  # will install qt-5.x.x
-    brew install libxml2
-    make qt5py3
-    python labelImg.py
-    python  labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
+![Image text](https://wx1.sinaimg.cn/mw1024/e1fef501gy1g9zqfvy94wj20i10phgmd.jpg)
 
 
-Windows
-^^^^^^^
-
-Download and setup `Python 2.6 or
-later <https://www.python.org/downloads/windows/>`__,
-`PyQt4 <https://www.riverbankcomputing.com/software/pyqt/download>`__
-and `install lxml <http://lxml.de/installation.html>`__.
-
-Open cmd and go to `labelImg <#labelimg>`__ directory
-
-.. code::
-
-    pyrcc4 -o resources.py resources.qrc
-    python labelImg.py
-    python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-Get from PyPI
-~~~~~~~~~~~~~~~~~
-.. code::
-
-    pip install labelImg
-    labelImg
-    labelImg [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-I tested pip on Ubuntu 14.04 and 16.04. However, I didn't test pip on macOS and Windows
-
-Use Docker
-~~~~~~~~~~~~~~~~~
-.. code::
-
-    docker run -it \
-    --user $(id -u) \
-    -e DISPLAY=unix$DISPLAY \
-    --workdir=$(pwd) \
-    --volume="/home/$USER:/home/$USER" \
-    --volume="/etc/group:/etc/group:ro" \
-    --volume="/etc/passwd:/etc/passwd:ro" \
-    --volume="/etc/shadow:/etc/shadow:ro" \
-    --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    tzutalin/py2qt4
-
-    make qt4py2;./labelImg.py
-
-You can pull the image which has all of the installed and required dependencies. `Watch a demo video <https://youtu.be/nw1GexJzbCI>`__
 
 
-Usage
+
+环境需求
+------
+    1. python 环境
+    2. pyqt4 & pyqt5
+
+
+
+使用说明
 -----
+    打开方法
 
-Steps
-~~~~~
+        1. 命令行直接python + labelIMG.py (labelIMG.py所在路径)
+        2. 运行dist文件夹下的exe文件
 
-1. Build and launch using the instructions above.
-2. Click 'Change default saved annotation folder' in Menu/File
-3. Click 'Open Dir'
-4. Click 'Create RectBox'
-5. Click and release left mouse to select a region to annotate the rect
-   box
-6. You can use right mouse to drag the rect box to copy or move it
 
-The annotation will be saved to the folder you specify.
 
-You can refer to the below hotkeys to speed up your workflow.
+	标注框绘制/编辑
+在绘制标注框时有四种模式1.编辑模式（默认）2.绘制模式3.绘制内部框模式4.编辑内部框模式
+    1	按下快捷键w，进入2.绘制模式，鼠标第一次点击建立起始点，每次鼠标点击添加新点
+		a. 	在左上角选定新绘制的标注框的形状
+		b.	多边形需要最后一次左键鼠标和第一个点距离接近，保证多边形闭合
+		c.	线段需要按鼠标中键来结束绘制
+		d.	鼠标右键可以移除绘制过程中的最后一个点
+	    e.	完成绘制后要求输入标注名，此时可直接在弹窗中输入，也可以在右上角的使用默认标注中，勾选，然后在后面的输入框中输入默认的标注名，则可自动填写新的标注框的标注名
+		f． 按下快捷键T可以从2.绘制模式退出为1.编辑模式
+	2	当已存在标注框，且处于1.编辑模式时，可以对标注框进行调框
+		a.	左键点击标注框的顶点，然后拖拽可以实现标注框拉伸
+		b.	左键点击标注框内部，此时会选中当前标注框，按住左键拖拽鼠标可实现标注框位移
+		c.	在选中了标注框的情况下，右键标注框顶点，可以删除该顶点
+		d.	在选中了标注框的情况下，按下c，可以删除该标注框
+		e.	在右方的标注框列表中，可以直接点击列表来选定对应的标注框
+	3	当已存在标注框，且选定该标注框时，可以按r键进入3.绘制内部标注框
+        a.	绘制内部标注框必须选定一个已存在的外部标注框，其他操作与4.2.1相同，只是以r键替换w键
+        b.	在右上角区域勾选多边形标注，并在输入框内，可调整内部框的标注名
+		c.	按下T快捷键，退出至1.编辑模式
+    4	当已存在内部标注框的情况下，先选定外部标注框，然后按q键进入4.内部编辑模式。
+        a.	内部编辑模式和4.2.2相同，但是必须选定指定的外部标注框，才能编辑该标注框内的内部框，如果要更换选择的外部框，需要按T退出至1.编辑模式，才可以更换选定的外部框
+        b.	选定内部标注框的情况下，按C可以删除该标注框
+        c.	按T退出至1.编辑模式
+~~~~~~~
 
-Create pre-defined classes
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can edit the
-`data/predefined\_classes.txt <https://github.com/tzutalin/labelImg/blob/master/data/predefined_classes.txt>`__
-to load pre-defined classes
-
-Hotkeys
+快捷键
 ~~~~~~~
 
 +------------+--------------------------------------------+
-| Ctrl + u   | Load all of the images from a directory    |
+| Ctrl + f   | 将图片缩放为最适合比例
 +------------+--------------------------------------------+
-| Ctrl + r   | Change the default annotation target dir   |
+| Ctrl + s   | 保存                                    
 +------------+--------------------------------------------+
-| Ctrl + s   | Save                                       |
+| Ctrl + d   | 复制标注框       
 +------------+--------------------------------------------+
-| Ctrl + d   | Copy the current label and rect box        |
+| Space      | 核实图片        
 +------------+--------------------------------------------+
-| Space      | Flag the current image as verified         |
+| w          | 绘制一个外部框                      
 +------------+--------------------------------------------+
-| w          | Create a base polygon                      |
+| r          | 绘制一个内部框                   
 +------------+--------------------------------------------+
-| r          | Create an inner polygon                    |
+| q          | 编辑内部框                                
 +------------+--------------------------------------------+
-| q          | edit inner polygon                         |
+| t          | 退出所有其他模式                            
 +------------+--------------------------------------------+
-| t          | quit all the other create/edit             |
+| c          | 删除所选标注框                              
 +------------+--------------------------------------------+
-| c          | delete selected polygon                    |
+| d          | 下一张图片                                  
 +------------+--------------------------------------------+
-| d          | Next image                                 |
+| a          | 上一张图片                                 
 +------------+--------------------------------------------+
-| a          | Previous image                             |
+| Ctrl++     | 缩小                                      
 +------------+--------------------------------------------+
-| Ctrl++     | Zoom in                                    |
-+------------+--------------------------------------------+
-| Ctrl--     | Zoom out                                   |
-+------------+--------------------------------------------+
-| ↑→↓←       | Keyboard arrows to move selected rect box  |
+| Ctrl--     | 放大                                     
 +------------+--------------------------------------------+
 
 FAQ:
 
-1. you must select a base polygon so that you can create an inner polygon to it
+1. 你必须选择一个外部框，才可以对内部框进行操作（绘制或者编辑)
 
-2. you must select a base polygon so that you can edit its inner polygon 
+2. 按快捷键T，退出至编辑模式，才可以切换选择的外部框
 
-3. press 'T' to quit the creat polygon / edit innerpolygon
-
-4. you can choose the shape of the polygon when creating
+3. 默认标注框形状为多边形
 
 多边形：    polygon
 矩形：      rectangle

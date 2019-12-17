@@ -338,7 +338,7 @@ class Polygon(object):
                 
                 newpolygon.points = [copy.deepcopy(p) for p in polygon.points]
                 newpolygon.fill = self.fill
-                newpolygon.line_color = polygon.line_color
+                newpolygon.line_color = polygon .line_color
                 newpolygon.selected = False
                 copybox.append(newpolygon)
                 

@@ -1293,7 +1293,6 @@ class MainWindow(QMainWindow, WindowMixin):
             self.filePath = unicodeFilePath
             self.canvas.verified = None
             self.canvas.loadPixmap(QPixmap.fromImage(image))
-            
             if self.labelFile:
                 self.loadLabels(self.labelFile.shapes)
             

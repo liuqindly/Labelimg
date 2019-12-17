@@ -68,10 +68,10 @@ class LabelFile(object):
     def toggleVerify(self):
         if self.verified == None:
             self.verified = 'yes'
-        # elif self.verified == 'yes':
-        #     self.verified = 'yes1'
-        # elif self.verified == 'yes1':
-        #     self.verified = 'yes2'
+        elif self.verified == 'yes':
+            self.verified = 'yes1'
+        elif self.verified == 'yes1':
+            self.verified = 'yes2'
         else:
             self.verified = None
 

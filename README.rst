@@ -8,9 +8,9 @@ LabelImg-polygon
 图片示例：
 
 
-![image](https://wx4.sinaimg.cn/mw1024/e1fef501gy1g9zqfu1fimj21hc0sd15z.jpg)
+![image](https://github.com/liuqindly/Labelimg/blob/master/example/ex1.jpg)
 
-![image](https://wx1.sinaimg.cn/mw1024/e1fef501gy1g9zqfvy94wj20i10phgmd.jpg)
+![image](https://github.com/liuqindly/Labelimg/blob/master/example/ex2.jpg)
 
 
 
